@@ -36,7 +36,7 @@ class ImagesDataset(Dataset):
 def load_data(path, batch_size, num_workers=0):
     def split_array(array: list):
         split0, split1 = int(.6 * len(array)), int(.8 * len(array))
-        for s, e in [[0, split0], [split0, split1], [split1, len(array)]]:
+        for s, e in [(0, split0), (split0, split1), (split1, len(array))]:
             yield array[s:e]
 
     images, labels = [[], [], []], [[], [], []]
