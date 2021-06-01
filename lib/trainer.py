@@ -37,7 +37,6 @@ class Trainer:
             self.history[0].append(stats_t)
             self.history[1].append(stats_v)
 
-    @torch.no_grad()
     def evaluate(self, data_loader_e, device=None):
         print('Evaluating...')
         stats_e = self._run_epoch(data_loader_e, device, train=False)  # evaluate
