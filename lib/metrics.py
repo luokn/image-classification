@@ -7,7 +7,6 @@
 # @Time    : 13:50:41
 
 import torch
-from torch import FloatTensor
 
 
 # For image classification task
@@ -15,7 +14,7 @@ class Metrics:
     def __init__(self):
         self.n, self.cor, self.acc = 0, 0, .0
 
-    def update(self, pred: FloatTensor, target: FloatTensor):
+    def update(self, pred: torch.Tensor, target: torch.Tensor):
         self.n += target.nelement()
         self.cor += torch.sum(pred.argmax(-1) == target).item()
         self.acc = self.cor / self.n
