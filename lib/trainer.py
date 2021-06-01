@@ -44,21 +44,21 @@ class Trainer:
         self.history[-1].append(stats_e)
 
     def _run_epoch(self, data_loader, device, train=True):
-        metrics, total_loss, stats = Metrics(), .0, {}  # initialize
+        metrics, total_loss = Metrics(), .0  # initialize
         with torch.set_grad_enabled(train):  # enable or disable autograd
             self.net.train(train)
             with ProgressBar(total=len(data_loader)) as bar:
                 for i, batch in enumerate(data_loader):
                     batch = [tensor.cuda(device) for tensor in batch]  # move tensors to device
                     inputs, target = batch[:-1], batch[-1]
-                    output = self.net(*inputs)
-                    loss = self.criterion(output, target)
+                    pred = self.net(*inputs)
+                    loss = self.criterion(pred, target)
                     if train:
                         self.optimizer.zero_grad()
                         loss.backward()
                         self.optimizer.step()
                     total_loss += loss.item()  # update total loss
-                    metrics.update(output, target)  # update metrics
+                    metrics.update(pred, target)  # update metrics
                     stats = {'loss': total_loss / (i + 1), **metrics.stats()}  # update stats
                     bar.update(' '.join([f'{k}:{v:7.4f}' for k, v in stats.items()]))  # update progress bar
         return stats

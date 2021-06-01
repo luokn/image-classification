@@ -28,7 +28,7 @@ parser.add_argument('--lr', type=float, default=1e-3)
 parser.add_argument('--workers', type=int, default=0)
 
 parser.add_argument('--model', type=str, default='resnet18')
-parser.add_argument('--classes', type=int)
+parser.add_argument('--classes', type=int, default=102)
 
 models = {
     'resnet18': resnet18, 'resnet34': resnet34, 'resnet50': resnet50,
@@ -36,7 +36,6 @@ models = {
 }
 args = parser.parse_args()
 print(args)
-
 
 if __name__ == '__main__':
     if args.gpus:
