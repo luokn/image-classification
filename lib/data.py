@@ -35,15 +35,17 @@ class ImagesDataset(Dataset):
 
 def load_data(path, batch_size, num_workers=0):
     def split_array(array: list):
-        split1, split2 = int(.6 * len(array)), int(.8 * len(array))
-        return [array[:split1], array[split1:split2], array[split2:]]
+        split0, split1 = int(.6 * len(array)), int(.8 * len(array))
+        for s, e in [[0, split0], [split0, split1], [split1, len(array)]]:
+            yield array[s:e]
 
     images, labels = [[], [], []], [[], [], []]
-    for c, d in enumerate(os.listdir(path)):
-        # print(f'{d} => {c}')
-        for i, imgs in enumerate(split_array([f'{path}/{d}/{f}' for f in os.listdir(f'{path}/{d}')])):
+    for category, directory in enumerate(os.listdir(path)):
+        # print(f'{directory} => {category}')
+        files = [f'{path}/{directory}/{file}' for file in os.listdir(f'{path}/{directory}')]
+        for i, imgs in enumerate(split_array(files)):
             images[i] += imgs
-            labels[i] += [c] * len(imgs)
+            labels[i] += [category] * len(imgs)
     return [
         DataLoader(dataset=ImagesDataset(*args),
                    batch_size=batch_size, num_workers=num_workers, shuffle=True, pin_memory=True)
