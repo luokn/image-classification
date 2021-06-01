@@ -17,10 +17,11 @@ from nn import resnet18, resnet34, resnet50, resnet101, resnet152
 
 parser = ArgumentParser()
 
-parser.add_argument('--batch', type=int, default=64)
+parser.add_argument('--data', type=str, default='data/101_ObjectCategories')
 parser.add_argument('--checkpoint', type=str, default=None)
 parser.add_argument('--checkpoints', type=str, default='./checkpoints')
-parser.add_argument('--data', type=str, default='data/101_ObjectCategories')
+
+parser.add_argument('--batch', type=int, default=64)
 parser.add_argument('--epochs', type=int, default=100)
 parser.add_argument('--gpu', type=int, default=None)
 parser.add_argument('--gpus', type=str, default=None)

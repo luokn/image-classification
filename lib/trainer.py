@@ -21,8 +21,7 @@ class Trainer:
         self.optimizer = optimizer
         self.criterion = criterion
         self.checkpoints = checkpoints
-        self.history = [[], [], []]
-        self.epoch, self.best_epoch, self.min_loss = 1, -1, float('inf')
+        self.epoch, self.best_epoch, self.min_loss, self.history = 1, 0, float('inf'), [[], [], []]
 
     def fit(self, data_loader_t, data_loader_v, epochs=100, device=None):
         while self.epoch <= epochs:
@@ -30,9 +29,9 @@ class Trainer:
             stats_t = self._run_epoch(data_loader_t, device, train=True)  # train epoch
             print(f"Epoch {self.epoch} validating...")
             stats_v = self._run_epoch(data_loader_v, device, train=False)  # validate epoch
-            if self.epoch > epochs // 10 and stats_v['loss'] < self.min_loss:
+            if self.epoch > 10 and stats_v['loss'] < self.min_loss:
+                self.save_checkpoint(self.epoch, stats_v['loss'])  # save checkpoint
                 self.best_epoch, self.min_loss = self.epoch, stats_v['loss']
-                self.save_checkpoint(self.best_epoch, self.min_loss)  # save checkpoint
             self.epoch += 1
             self.history[0].append(stats_t)
             self.history[1].append(stats_v)
@@ -43,7 +42,7 @@ class Trainer:
         self.history[-1].append(stats_e)
 
     def _run_epoch(self, data_loader, device, train=True):
-        metrics, total_loss = Metrics(), .0  # initialize
+        metrics, total_loss = Metrics(), .0
         with torch.set_grad_enabled(train):  # enable or disable autograd
             self.net.train(train)
             with ProgressBar(total=len(data_loader)) as bar:
@@ -79,6 +78,5 @@ class Trainer:
         states = torch.load(f'{self.checkpoints}/{checkpoint}')
         self.net.load_state_dict(states['net'])
         self.optimizer.load_state_dict(states['optimizer'])
-        self.epoch = states['epoch'] + 1
+        self.epoch, self.best_epoch, self.min_loss = states['epoch'] + 1, states['epoch'], states['loss']
         self.history = states['history']
-        self.best_epoch, self.min_loss = states['epoch'], states['loss']
