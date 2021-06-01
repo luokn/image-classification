@@ -47,7 +47,7 @@ def load_data(path, batch_size, num_workers=0):
             images[i] += imgs
             labels[i] += [category] * len(imgs)
     return [
-        DataLoader(dataset=ImagesDataset(*args),
-                   batch_size=batch_size, num_workers=num_workers, shuffle=True, pin_memory=True)
-        for args in zip(images, labels)
+        DataLoader(dataset=ImagesDataset(*args), batch_size=batch_size,
+                   num_workers=num_workers, shuffle=i == 0, pin_memory=True)
+        for i, args in enumerate(zip(images, labels))
     ]
