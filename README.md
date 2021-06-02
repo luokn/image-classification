@@ -1,11 +1,15 @@
-# Image Classification
+<h2 align="center">Image Classification</h2>
 
-**Dataset**
+**Data**
 
-[101_ObjectCategories](http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz)
+1. Download [101_ObjectCategories.tar.gz](http://www.vision.caltech.edu/Image_Datasets/Caltech101/101_ObjectCategories.tar.gz)
 
-**Train**
+2. Unzip 101_ObjectCategories.tar.gz to data/101_ObjectCategories
 
-```bash
-python3 ./train.py --data data/101_ObjectCategories --checkpoints checkpoints --batch 16
-```
+**Usage**
+
+1. Create folder: `mkdir checkpoints`
+
+2. Train on GPU0: `python3 ./train.py --data data/101_ObjectCategories --model resnet18 --classes 102 --checkpoints checkpoints --batch 32 --workers 8 --gpu 0`
+
+3. Train on GPUs: `python3 ./train.py --data data/101_ObjectCategories --model resnet18 --classes 102 --checkpoints checkpoints --batch 64 --workers 8 --gpus 0,1,2,3`
