@@ -8,7 +8,7 @@
 
 **Usage**
 
-1. Create folder: `mkdir checkpoints`
+1. Create directory: `mkdir checkpoints`
 
 2. Train on GPU0: `python3 ./train.py --data data/101_ObjectCategories --model resnet18 --classes 102 --checkpoints checkpoints --batch 32 --workers 8 --gpu 0`
 
